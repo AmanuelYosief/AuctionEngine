@@ -5,6 +5,9 @@
  */
 package auctionengine;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +26,17 @@ public class AuctionEngine {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
-
-    List<Triplet<String, String, Integer>> Bids = new ArrayList<>();    
+    
+    List<Triplet<String, String, Integer>> Bids = new ArrayList<>();
+    // machine indepedent text document database to store all the items and bids on them
+    File file = new File("AuctionDb.txt");
+    FileWriter fileWriter = new FileWriter(file);
+    
+    System.out.println("Welcome to the Auction Engine");
+    
+    
      
     /*
       ArrayList<String> arlist = new ArrayList<String>( );

@@ -16,7 +16,7 @@ import java.io.IOException;
 public interface interfaceBid {
     // Record a user's bid.
     // Each bid is higher than before
-    public int PlaceBid(String item, long price, String bidder);
+    public void PlaceBid(String item, long price, String bidder);
     // Get the current winning bid for an item
     public void getCurrentBid(Item item);
     // Get all the bids for an item

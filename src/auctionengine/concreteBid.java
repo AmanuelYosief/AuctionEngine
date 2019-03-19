@@ -13,7 +13,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -30,18 +37,96 @@ public class concreteBid implements interfaceBid {
     
     
     @Override
-    public int PlaceBid(String item, long price, String bidder) {
-                 File file = new File("AuctionEngine.txt");
-                try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
-                        writer.write(item + "\t" + price + "\t" + bidder + "\r\n");
-                    } catch (IOException e) {
-                        e.printStackTrace();
+    public void PlaceBid(String item, long price, String bidder) {
+        BufferedReader br;
+        String line = null;
+        BufferedWriter writer;
+        String file = "AuctionEngine.txt";
+        try {
+            br = new BufferedReader(new FileReader("AuctionEngine.txt"));
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains(item)) {
+                    String updatedMessage = item + "\t" + price + "\t" + bidder;
+                    System.out.println(updatedMessage);
+                    List<String> fileContent = new ArrayList<>(Files.readAllLines(Paths.get("AuctionEngine.txt", ""), StandardCharsets.UTF_8));
+
+                    for (int i = 0; i < fileContent.size(); i++) {
+                        if (fileContent.get(i).equals(line)) {
+                            fileContent.set(i, updatedMessage);
+                            break;
+                        }
                     }
-        
-        
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    Files.write(Paths.get("AuctionEngine.txt", ""), fileContent, StandardCharsets.UTF_8);
+                    // <editor-fold>                   
+
+                    /*    
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter("AuctionEngine.txt", true))) {
+			bw.write(updatedMessage);
+			System.out.println("Done");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+                    
+                    
+                    
+                       break;
+                } else {
+
+                }
+
+            }
+                     */
+ /*   
+
+        try {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(Paths.get("AuctionEngine.txt", ""), StandardCharsets.UTF_8));
+            
+            for (int i = 0; i < fileContent.size(); i++) {
+                System.out.println(fileContent.get(i).toString());
+                    if (fileContent.get(i).equals(item)) {
+                        
+                    fileContent.set(i, item + "\t" + 3500 + "\t" + bidder);
+                    System.out.println(bidder + item + price);
+                    
+                    break;
+                }
+            }
+            Files.write(Paths.get("AuctionEngine.txt", ""), fileContent, StandardCharsets.UTF_8);
+            System.out.println(fileContent.toString());
+            
+
+            File file = new File("AuctionEngine.txt");
+            try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(item + "\t" + price + "\t" + bidder + "\r\n");
+            } catch (IOException e) {
+            e.printStackTrace();
+            }
+
+            
+            //To change body of generated methods, choose Tools | Templates.
+        } catch (IOException ex) {
+            Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+                     */
+                    // </editor-fold>
+                }
+
+            } 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
+    
+    
+    
+    
+    
+    
     // Get the current winning bid for an item
     @Override
     public void getCurrentBid(Item item) {
@@ -92,9 +177,11 @@ public class concreteBid implements interfaceBid {
 
             while ((line = br.readLine()) != null) {
                 String tmp[] = line.split("\t");
-                System.out.println(Arrays.toString(tmp));
+              //  System.out.println(Arrays.toString(tmp));
                 if (Arrays.asList(tmp).contains(item.trim())) {
-                    System.out.println("That bid item exists");
+                    
+                    ;
+                   System.out.println("That bid item exists");
                     return true;
                 } else {
                     System.out.println("Bid item doesn't exist, do you want to add and place a bid on it?");

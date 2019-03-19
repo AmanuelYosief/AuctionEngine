@@ -73,10 +73,10 @@ public class AuctionEngine {
                             try{
                             price = Long.valueOf(scanner.nextLine());
                             }catch(NumberFormatException e){
-                            System.out.println("Expecting numeric value, not: " + line + "please try again \r\n" );
+                            System.out.println("Expecting numeric value, not: " + line + " ,please try again \r\n" );
                             }
                             conn.PlaceBid(item, price, User);
-                            System.out.println(User + item + price);
+
                         }else {
                         System.out.println("Item doesn't exit");
                         }
@@ -92,7 +92,7 @@ public class AuctionEngine {
                         System.err.println("Invalid option, please try again");
                 }
             }
-             System.out.println("Hit enter to get to get back to menu");
+
         }
 
 

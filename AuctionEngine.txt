@@ -1,2 +1,2 @@
-Lambogine	3020	Harry
-Else	250	John
+Lambogine	30000	job
+Harvey	123123	Amanuel

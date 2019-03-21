@@ -5,9 +5,7 @@
  */
 package auctionengine;
 
-
 import java.io.IOException;
-
 import java.util.Scanner;
 
 /**
@@ -15,114 +13,113 @@ import java.util.Scanner;
  * @author Amanuel
  */
 public class AuctionEngine {
-    static concreteBid conn = new concreteBid();
-    
-        final long value = 0;
-    // The person making the bid
-//  private final Person bidder;
-    // The value of the bid. This is always higher than before
+
+    static concreteBid auctionSystem = new concreteBid();
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
         String filename = "AuctionEngine.txt";
-        
-// <editor-fold>
-        /*
-    List<Triplet<String, String, Integer>> Bids = new ArrayList<>();
-    // machine indepedent text document database to store all the items and bids on them
+        String username = null;
+        // Create the Scanner
+        Scanner scanner = new Scanner(System.in);
+        long price = 0;
+        System.out.println("------------------------");
+        System.out.println("|Welcome to the Auction|");
+        System.out.println("------------------------");
 
-    
-    System.out.println("Welcome to the Auction Engine");
-*/ 
-        /*
- 
-    File file = new File(filename);
-            FileWriter fileWriter = new FileWriter(file,true);
-            
-            */
- // </editor-fold>
-
-    // Create the Scanner
-    Scanner scanner = new Scanner(System.in);
-    String line;
-    long price =0;
-    System.out.println("Hit enter to get to get started");
-    
-        while ((line = scanner.nextLine()) != null) {
-            String User = null;
-            if (User == null)
-            {
-            System.out.println("Enter name");
-            User= scanner.nextLine();
-            }
-
-                        promptMenu();
-            here:
-            while (true) {
-                System.out.print("What would you like to do? ");
-                String str = scanner.nextLine();
-                switch (str.toUpperCase()) {
-                    case "1":
-                        System.out.println("Enter the name of the item you want to place a bid for");
-                        String item = scanner.nextLine();
-                        boolean checkItem = conn.checkItem(item);
-                        if (checkItem == true){
-                            System.out.println("Enter the price you want to bid");
-                            try{
-                            price = Long.valueOf(scanner.nextLine());
-                            }catch(NumberFormatException e){
-                            System.out.println("Expecting numeric value, not: " + line + " ,please try again \r\n" );
-                            }
-                            conn.PlaceBid(item, price, User);
-
-                        }else {
-                        System.out.println("Item doesn't exit");
-                        }
-                        break here;
-                    case "2":                   
-                        break here;
-                    case "3":
-                        conn.readFile(filename);
-                        break here;
-                    case "4":
-                        break here;
-                    default:
-                        System.err.println("Invalid option, please try again");
-                }
-            }
-
+        while (username == null || username.trim().equals("")){
+            System.out.println("Provide username:");
+            username = scanner.nextLine().trim();
         }
 
-
-    // <editor-fold>
-        // Number of pennies
-    String message = "";
-    
-    
-    /*
-      ArrayList<String> arlist = new ArrayList<String>( );
-      arlist.add("JAVA");
-      arlist.add("Csharp");
-      arlist.add("Python");
-      arlist.add("Php");
-      arlist.add("Android");
-      arlist.add("HTML");
-      //Adding "C++" at the sixth position
-      arlist.add(5, "C++");
-      //displaying elements
-      System.out.println(arlist);
-      */
-    
-     // </editor-fold>
+        //System.out.println("enter to get to get started");
+        String SystemState = "0";
+        while (SystemState != null) {
+            while (true) {
+                promptMenu();
+                System.out.print("What would you like to do? ");
+                SystemState = scanner.nextLine();
+                here:
+                switch (SystemState.trim()) {
+                    case "1":
+                           // User wants to place a bid
+                            auctionSystem.DisplayItems();
+                            System.out.println("Enter the name of the item you want to place a bid for");
+                            String item = scanner.nextLine().trim();
+                            // Check if the item exists
+                            boolean checkItem = auctionSystem.checkItem(item);
+                            if (checkItem == true) {
+                                System.out.println("Enter the price you want to bid");
+                                try {
+                                    price = Long.valueOf(scanner.nextLine());
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Expecting numeric value, not: " + price + ", try again \r\n");
+                                    break here;
+                                }
+                                int maxValue = auctionSystem.getMaxValue(item);
+                                if (price < maxValue) {
+                                    System.out.println("New bid must be higher");
+                                } else {
+                                    // New Bid is higher than previous max bid
+                                    auctionSystem.PlaceBid(item, price, username);
+                                }
+                            } else {
+                                System.out.println(item + " is not listed for bid. Try again");
+                                break here;
+                            }
+                        SystemState = "Main Menu";
+                        break here;
+                    case "2":
+                        auctionSystem.displayItem();
+                        // Get the current winning bid for an iem
+                        System.out.println("Enter item name ");
+                        item = scanner.nextLine().trim();
+                        // Check if the item exists
+                        checkItem = auctionSystem.checkItem(item);
+                        if (checkItem == true) {
+                            String Price = auctionSystem.getCurrentBid(item);
+                            System.out.println("Current bid price: " + Price);
+                        } else {
+                            System.out.println(item + " is not listed for bid. Try again");
+                        }
+                        SystemState = "Main Menu";
+                        break here;
+                    case "3":
+                        // Get all the bids for an item
+                        auctionSystem.displayItem();
+                        // Get the current winning bid for an iem
+                        System.out.println("Enter item name ");
+                        item = scanner.nextLine().trim();
+                        // Check if the item exists
+                        checkItem = auctionSystem.checkItem(item);
+                        if (checkItem == true) {
+                            //   System.out.println(" Bid item is listed");
+                            //getCurrentBid();
+                            String Price = auctionSystem.getCurrentBid(item);
+                            int maxValue = 0;
+                        } else {
+                            System.out.println(item + " is not listed for bid. Try again");
+                        }
+                        SystemState = "Main Menu";
+                        break here;
+                    case "4":
+                        auctionSystem.displayUsersBids(username);
+                        // Get all the items on which a user has a bid
+                        break here;
+                    case "5":
+                        System.exit(0);
+                    default:
+                        System.out.println("Invalid input try again");
+                        SystemState = "Main Menu";
+                }
+            }
+        }
+    }
+    private static void promptMenu() {
+        System.out.println("\r\n" + "Auction Options");
+        System.out.println("[1] to place bids" + "\r\n" + "[2] to display current winning bids" + "\r\n" + "[3] to display all bids" + "\r\n" + "[4] to display all your current bids" + "\r\n" + "[5] to leave Auction");
+    }
 }
-    
-private static void promptMenu( ) {
-            System.out.println("\r\n" + "Welcome to the Auction Room. Here are your Options: ");
-            System.out.println("[1] to place bids" + "\r\n" + "[2] to display current bids" + "\r\n" + "[3] to display all bids" + "\r\n" + "[4] to leave Auction");
-  }
-
-
-}
-

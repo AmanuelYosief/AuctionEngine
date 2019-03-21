@@ -6,24 +6,19 @@
 package auctionengine;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-
 /**
  *A class that models an auction bid
  *Contains a reference to the Person bidding and the amount bid
  * @author Amanuel
  */
 public interface interfaceBid {
-    // Record a user's bid.
-    // Each bid is higher than before
     public void PlaceBid(String item, long price, String bidder);
-    // Get the current winning bid for an item
-    public void getCurrentBid(Item item);
-    // Get all the bids for an item
-    public void getAllBids(Item item);
-    // Get all the items on which a user has bid
-    public void getAllBidsPerson(Person bidder);
-    public  void readFile(String filename) throws FileNotFoundException, IOException;
-    public boolean checkItem(String item);
+    public String getCurrentBid(String item);
+    public boolean checkItem(String item); 
+    public boolean stringContainsNumber(String s);
+    public int getMaxValue(String item) throws FileNotFoundException;
+    public void DisplayItems();
+    public void displayItem();
+    public void displayUsersBids(String Username);
     
 }

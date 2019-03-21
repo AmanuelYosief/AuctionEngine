@@ -1,2 +1,3 @@
 Lambogine	30000	job
 Harvey	123123	Amanuel
+Jackson	30000	job

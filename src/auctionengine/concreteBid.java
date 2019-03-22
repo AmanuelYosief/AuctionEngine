@@ -30,17 +30,17 @@ import java.util.regex.Pattern;
  */
 public class concreteBid implements interfaceBid {
 
-    // Record a user's bid.
-    // Each bid is higher than before
+    // Local pesistant database
+    File fileName = new File("AuctionEngine.txt");
+
     public concreteBid() {
-        ;  // Set the initial value for the class attribute x
     }
 
-    @Override
-    public void PlaceBid(String item, long price, String bidder) {
-        File file = new File("AuctionEngine.txt");
+    // Records a User's bid
 
-        try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
+    @Override
+    public void placeBid(String item, int price, String bidder) {
+        try (Writer writer = new BufferedWriter(new FileWriter(fileName, true))) {
             String content = item + "\t" + price + "\t" + bidder;
             writer.write(content + "\r\n");
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class concreteBid implements interfaceBid {
         String itemPrice;
         String tmp[] = null;
         try {
-            Scanner file = new Scanner(new File("AuctionEngine.txt"));
+            Scanner file = new Scanner(fileName);
             while (file.hasNextLine()) {
                 final String lineFromFile = file.nextLine();
                 if (lineFromFile.contains(item)) {
@@ -67,11 +67,12 @@ public class concreteBid implements interfaceBid {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
+// Check the item exists so that a bid can be placed
     @Override
     public boolean checkItem(String item) {
-
+        // Ensure the item entered isn't null or has numeric value inside
         if (item.trim() == null || item.trim().equals("") || stringContainsNumber(item) == true) {
             return false;
         } else {
@@ -80,16 +81,16 @@ public class concreteBid implements interfaceBid {
             String tmp[] = null;
             Scanner filez = null;
             try {
-                filez = new Scanner(new File("AuctionEngine.txt"));
+                filez = new Scanner(fileName);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
             }
             while (filez.hasNextLine()) {
                 final String lineFromFile = filez.nextLine();
+                // Checks that the line contains the item, return True if item exists
                 if (lineFromFile.contains(item)) {
                     tmp = lineFromFile.split("\t");
                     exists = true;
-                    // System.out.println(Arrays.asList(tmp).contains(name));
                 }
                 if (exists = true) {
                     return true;
@@ -97,12 +98,11 @@ public class concreteBid implements interfaceBid {
                     return false;
                 }
             }
-
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
     
-    
+// Ensure inputs don't contain integers
     @Override
     public boolean stringContainsNumber(String s) {
         Pattern p = Pattern.compile("[0-9]");
@@ -110,26 +110,31 @@ public class concreteBid implements interfaceBid {
         return m.find();
     }
     
+// Get maximum bid price set on an item
     @Override
     public int getMaxValue(String item) throws FileNotFoundException {
 
+        // ArrayList is used to store all the item's prices
         List<Integer> list = new ArrayList<Integer>();
         String tmp[] = null;
-        Scanner filez = new Scanner(new File("AuctionEngine.txt"));
-
+        Scanner filez = new Scanner(fileName);
         while (filez.hasNextLine()) {
             final String lineFromFile = filez.nextLine();
             if (lineFromFile.contains(item)) {
                 tmp = lineFromFile.split("\t");
+                // Adds prices to ArrayList
                 int price = Integer.parseInt(tmp[1]);
                 list.add(price);
             }
         }
+        // Collection.max(List) returns the maximum value from our ArrayList
         return Collections.max(list);
     }
-    
+
+    // Display all the bidders for all items
     @Override
-    public void DisplayItems() {
+    public void displayAllItems() {
+        // System format is used to change the output and draw a table in CLI
         try {
             BufferedReader br = new BufferedReader(new FileReader("AuctionEngine.txt"));
             String line = null;
@@ -139,17 +144,16 @@ public class concreteBid implements interfaceBid {
             while ((line = br.readLine()) != null) {
                 String tmp[] = line.split("\t");
                 String item = tmp[0];
-                long bidPrice = Integer.parseInt(tmp[1]);
+                int bidPrice = Integer.parseInt(tmp[1]);
                 String name = tmp[2];
-                // System.out.println(item + "\t" + bidPrice + "\t" + name);
-                format = "|%1$-15s|%2$-15s|%3$-10s|\n";
+                format = "|%1$-15s|%2$-15s|%3$-15s|\n";
                 System.out.format(format, item, "£" + bidPrice, name);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+// Display all the items available to be bidded on
     @Override
     public void displayItem() {
         // DisplayItem presents the user with all the items in the Auction
@@ -182,16 +186,16 @@ public class concreteBid implements interfaceBid {
         }
 
     }
-    
-    // DONE
+
+    // Displays User's bid
     @Override
-    public void displayUsersBids(String Username){
+    public void displayUsersBids(String Username) {
         // Gets all the items on which a user has a bid
         // User login in and selects an Item
         String tmp[] = null;
         Scanner filez = null;
         try {
-            filez = new Scanner(new File("AuctionEngine.txt"));
+            filez = new Scanner(fileName);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(concreteBid.class.getName()).log(Level.SEVERE, null, ex);
         }

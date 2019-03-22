@@ -1,3 +1,8 @@
-Lambogine	30000	job
-Harvey	123123	Amanuel
-Jackson	30000	job
+Commando Watch	350	Nietzsche
+Asuz Zenbook	699	Ubermensch21
+Nexus 7	199	Harrison21
+Alfa Remeo	28000	Unknown	
+Microsoft Xbox 	410	Steve
+Bitcoin	4000	Satoshi
+Dash Cam	19	MoriatyLives
+Acer Aspire	179	Harrington

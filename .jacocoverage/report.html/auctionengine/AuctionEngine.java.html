@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AuctionEngine.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;AuctionEngine&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">auctionengine</a> &gt; <span class="el_source">AuctionEngine.java</span></div><h1>AuctionEngine.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package auctionengine;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Amanuel
+ */
+<span class="nc" id="L15">public class AuctionEngine {</span>
+
+<span class="nc" id="L17">    static concreteBid auctionSystem = new concreteBid();</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws IOException {
+        // TODO code application logic here
+<span class="nc" id="L24">        String username = null;</span>
+<span class="nc" id="L25">                int price = 0;</span>
+        // Create the Scanner
+<span class="nc" id="L27">        Scanner scanner = new Scanner(System.in);</span>
+
+<span class="nc" id="L29">        System.out.println(&quot;------------------------&quot;);</span>
+<span class="nc" id="L30">        System.out.println(&quot;|Welcome to the Auction|&quot;);</span>
+<span class="nc" id="L31">        System.out.println(&quot;------------------------&quot;);</span>
+
+        // Check username isn't null or empty
+<span class="nc bnc" id="L34" title="All 4 branches missed.">        while (username == null || username.trim().equals(&quot;&quot;)){</span>
+<span class="nc" id="L35">            System.out.println(&quot;Provide username:&quot;);</span>
+<span class="nc" id="L36">            username = scanner.nextLine().trim();</span>
+        }
+        
+        
+<span class="nc" id="L40">        String SystemState = &quot;0&quot;;</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        while (SystemState != null) {</span>
+            while (true) {
+<span class="nc" id="L43">                promptMenu();</span>
+<span class="nc" id="L44">                System.out.print(&quot;What would you like to do? &quot;);</span>
+<span class="nc" id="L45">                SystemState = scanner.nextLine();</span>
+                here:
+<span class="nc bnc" id="L47" title="All 22 branches missed.">                switch (SystemState.trim()) {</span>
+                    case &quot;1&quot;:
+                           // User wants to place a bid
+<span class="nc" id="L50">                            auctionSystem.displayItem();</span>
+                            
+<span class="nc" id="L52">                            System.out.println(&quot;Enter the name of the item you want to place a bid for&quot;);</span>
+<span class="nc" id="L53">                            String item = scanner.nextLine().trim();</span>
+                            
+                            // Check if the item exists
+<span class="nc" id="L56">                            boolean checkItem = auctionSystem.checkItem(item);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                            if (checkItem == true) {</span>
+<span class="nc" id="L58">                                System.out.println(&quot;Enter the price you want to bid&quot;);</span>
+                                try {
+<span class="nc" id="L60">                                    price = Integer.parseInt(scanner.nextLine());</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                                    if (price % 1 == 0) {</span>
+                                        // Price is a whole number
+                                // Get's the max bid on the item
+<span class="nc" id="L64">                                int maxValue = auctionSystem.getMaxValue(item);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                                if (price &lt; maxValue) {</span>
+<span class="nc" id="L66">                                    System.out.println(&quot;Bid must be higher than the current highest bid of &quot;  + maxValue);</span>
+                                } else {
+                                    // New Bid is higher than previous max bid
+<span class="nc" id="L69">                                    auctionSystem.placeBid(item, price, username);</span>
+                                }
+<span class="nc" id="L71">                                    } else {</span>
+<span class="nc" id="L72">                                        System.out.println(&quot;Not a whole number &quot; + price + &quot;, try again \r\n&quot;);</span>
+<span class="nc" id="L73">                                        break here;</span>
+                                    }
+<span class="nc" id="L75">                                } catch (NumberFormatException e) {</span>
+<span class="nc" id="L76">                                    System.out.println(&quot;Expecting a whole number value, not: &quot; + price + &quot;, try again \r\n&quot;);</span>
+<span class="nc" id="L77">                                    break here;</span>
+<span class="nc" id="L78">                                }</span>
+  
+                            } else {
+                                // Check item failed, item doesn't exist in our database
+<span class="nc" id="L82">                                System.out.println(item + &quot; is not listed for bid. Try again&quot;);</span>
+<span class="nc" id="L83">                                break here;</span>
+                            }
+                            // Display main menu and breaks back into the loop
+<span class="nc" id="L86">                        SystemState = &quot;Main Menu&quot;;</span>
+<span class="nc" id="L87">                        break here;</span>
+                    case &quot;2&quot;:
+                        // User want's to see current winng bid prices for an item
+                        // Display all the items
+<span class="nc" id="L91">                        auctionSystem.displayItem();</span>
+                        // Get the current winning bid for an iem
+<span class="nc" id="L93">                        System.out.println(&quot;Enter item name &quot;);</span>
+<span class="nc" id="L94">                        item = scanner.nextLine().trim();</span>
+                        // Check if the item exists
+<span class="nc" id="L96">                        checkItem = auctionSystem.checkItem(item);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                        if (checkItem == true) {</span>
+<span class="nc" id="L98">                            String Price = auctionSystem.getCurrentBid(item);</span>
+<span class="nc" id="L99">                            System.out.println(&quot;Current bid price: £&quot; + Price);</span>
+<span class="nc" id="L100">                        } else {</span>
+<span class="nc" id="L101">                            System.out.println(item + &quot; is not listed for bid. Try again&quot;);</span>
+                        }
+<span class="nc" id="L103">                        SystemState = &quot;Main Menu&quot;;</span>
+<span class="nc" id="L104">                        break here;</span>
+                    case &quot;3&quot;:
+                        // Get all the bids for an item
+<span class="nc" id="L107">                        auctionSystem.displayAllItems();</span>
+<span class="nc" id="L108">                        SystemState = &quot;Main Menu&quot;;</span>
+<span class="nc" id="L109">                        break here;</span>
+                    case &quot;4&quot;:
+<span class="nc" id="L111">                        auctionSystem.displayUsersBids(username);</span>
+                        // Get all the items on which a user has a bid
+<span class="nc" id="L113">                        break here;</span>
+                    case &quot;5&quot;:
+<span class="nc" id="L115">                        System.exit(0);</span>
+                    default:
+<span class="nc" id="L117">                        System.out.println(&quot;Incorrect input value; try again&quot;);</span>
+<span class="nc" id="L118">                        SystemState = &quot;Main Menu&quot;;</span>
+                }
+            }
+        }
+<span class="nc" id="L122">    }</span>
+    private static void promptMenu() {
+<span class="nc" id="L124">        System.out.println(&quot;\r\n&quot; + &quot;Auction Options&quot;);</span>
+<span class="nc" id="L125">        System.out.println(&quot;[1] to place bids&quot; + &quot;\r\n&quot; + &quot;[2] to display current winning bids&quot; + &quot;\r\n&quot; + &quot;[3] to display all bids&quot; + &quot;\r\n&quot; + &quot;[4] to display all your current bids&quot; + &quot;\r\n&quot; + &quot;[5] to leave Auction&quot;);</span>
+<span class="nc" id="L126">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

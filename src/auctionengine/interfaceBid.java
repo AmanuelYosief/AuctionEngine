@@ -12,13 +12,21 @@ import java.io.FileNotFoundException;
  * @author Amanuel
  */
 public interface interfaceBid {
-    public void PlaceBid(String item, long price, String bidder);
+    // Records a User's bid
+    public void placeBid(String item, int price, String bidder);
+    // Gets the current bid for an item
     public String getCurrentBid(String item);
+    // Check the item exists so that a bid can be placed
     public boolean checkItem(String item); 
+    // Ensure inputs don't contain integers
     public boolean stringContainsNumber(String s);
+    // Get maximum bid price set on an item
     public int getMaxValue(String item) throws FileNotFoundException;
-    public void DisplayItems();
+    // Display all the bidders for all items
+    public void displayAllItems();
+    // Display all the items available to be bidded on
     public void displayItem();
+    // Displayers User's bid
     public void displayUsersBids(String Username);
     
 }

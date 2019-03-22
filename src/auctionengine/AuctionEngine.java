@@ -21,21 +21,22 @@ public class AuctionEngine {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        String filename = "AuctionEngine.txt";
         String username = null;
+                int price = 0;
         // Create the Scanner
         Scanner scanner = new Scanner(System.in);
-        long price = 0;
+
         System.out.println("------------------------");
         System.out.println("|Welcome to the Auction|");
         System.out.println("------------------------");
 
+        // Check username isn't null or empty
         while (username == null || username.trim().equals("")){
             System.out.println("Provide username:");
             username = scanner.nextLine().trim();
         }
-
-        //System.out.println("enter to get to get started");
+        
+        
         String SystemState = "0";
         while (SystemState != null) {
             while (true) {
@@ -46,33 +47,47 @@ public class AuctionEngine {
                 switch (SystemState.trim()) {
                     case "1":
                            // User wants to place a bid
-                            auctionSystem.DisplayItems();
+                            auctionSystem.displayItem();
+                            
                             System.out.println("Enter the name of the item you want to place a bid for");
                             String item = scanner.nextLine().trim();
+                            
                             // Check if the item exists
                             boolean checkItem = auctionSystem.checkItem(item);
                             if (checkItem == true) {
                                 System.out.println("Enter the price you want to bid");
                                 try {
-                                    price = Long.valueOf(scanner.nextLine());
-                                } catch (NumberFormatException e) {
-                                    System.out.println("Expecting numeric value, not: " + price + ", try again \r\n");
-                                    break here;
-                                }
+                                    price = Integer.parseInt(scanner.nextLine());
+                                    if (price % 1 == 0) {
+                                        // Price is a whole number
+                                // Get's the max bid on the item
                                 int maxValue = auctionSystem.getMaxValue(item);
                                 if (price < maxValue) {
-                                    System.out.println("New bid must be higher");
+                                    System.out.println("Bid must be higher than the current highest bid of "  + maxValue);
                                 } else {
                                     // New Bid is higher than previous max bid
-                                    auctionSystem.PlaceBid(item, price, username);
+                                    auctionSystem.placeBid(item, price, username);
                                 }
+                                    } else {
+                                        System.out.println("Not a whole number " + price + ", try again \r\n");
+                                        break here;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Expecting a whole number value, not: " + price + ", try again \r\n");
+                                    break here;
+                                }
+  
                             } else {
+                                // Check item failed, item doesn't exist in our database
                                 System.out.println(item + " is not listed for bid. Try again");
                                 break here;
                             }
+                            // Display main menu and breaks back into the loop
                         SystemState = "Main Menu";
                         break here;
                     case "2":
+                        // User want's to see current winng bid prices for an item
+                        // Display all the items
                         auctionSystem.displayItem();
                         // Get the current winning bid for an iem
                         System.out.println("Enter item name ");
@@ -81,7 +96,7 @@ public class AuctionEngine {
                         checkItem = auctionSystem.checkItem(item);
                         if (checkItem == true) {
                             String Price = auctionSystem.getCurrentBid(item);
-                            System.out.println("Current bid price: " + Price);
+                            System.out.println("Current bid price: £" + Price);
                         } else {
                             System.out.println(item + " is not listed for bid. Try again");
                         }
@@ -89,20 +104,7 @@ public class AuctionEngine {
                         break here;
                     case "3":
                         // Get all the bids for an item
-                        auctionSystem.displayItem();
-                        // Get the current winning bid for an iem
-                        System.out.println("Enter item name ");
-                        item = scanner.nextLine().trim();
-                        // Check if the item exists
-                        checkItem = auctionSystem.checkItem(item);
-                        if (checkItem == true) {
-                            //   System.out.println(" Bid item is listed");
-                            //getCurrentBid();
-                            String Price = auctionSystem.getCurrentBid(item);
-                            int maxValue = 0;
-                        } else {
-                            System.out.println(item + " is not listed for bid. Try again");
-                        }
+                        auctionSystem.displayAllItems();
                         SystemState = "Main Menu";
                         break here;
                     case "4":
@@ -112,7 +114,7 @@ public class AuctionEngine {
                     case "5":
                         System.exit(0);
                     default:
-                        System.out.println("Invalid input try again");
+                        System.out.println("Incorrect input value; try again");
                         SystemState = "Main Menu";
                 }
             }
